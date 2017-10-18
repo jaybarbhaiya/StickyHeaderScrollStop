@@ -1,0 +1,52 @@
+<mvc:View
+	controllerName="stickyheaders.controller.Worklist"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc">
+
+	<Page id="page">
+
+		<content>
+			<Table
+				id="table"
+				width="100%"
+				keyboardMode="Navigation"
+				items="{
+					path: '/Customers',
+					sorter: {
+						path: 'CompanyName',
+						descending: false
+					}
+				}"
+				noDataText="{worklistView>/tableNoDataText}"
+				busyIndicatorDelay="{worklistView>/tableBusyDelay}"
+				growing="true"
+				growingScrollToLoad="true"
+				updateFinished="onUpdateFinished">
+				<columns>
+					<Column>
+						<Text text="CompanyName"/>
+					</Column>
+					<Column>
+						<Text text="City"/>
+					</Column>
+					<Column>
+						<Text text="Address"/>
+					</Column>
+				</columns>
+
+				<items>
+					<ColumnListItem>
+						<cells>
+							<Text text="{CompanyName}" />
+							<Text text="{City}" />
+							<Text text="{Address}" />
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+
+
+	</Page>
+
+</mvc:View>
