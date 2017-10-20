@@ -161,39 +161,18 @@ sap.ui.define([
 		onAfterRendering: function() {
 			this.enableSnapping();
 		},
-		
-		// enableSnapping: function() {
-		// 	var $table = $("table"), offset = $table.offset().top;
-			
-		// }
 
 		enableSnapping: function() {
-			var oTable = this.getView().byId("table");
-			this.$table = oTable.$();
-			this.$tFixed = this.$table.clone();
-			this.$tFixed.find("tbody").remove().end().addClass("sapFixed").insertBefore(this.$table);
-			this.$tFixed.find(".sapMListTblNavCol").width(0);
-			//this.resizeFixedHeader($tFixed, $table);
-			
 			this.$scrollContainer = $(".sapMPageEnableScrolling");
 			this.$scrollContainer.on("scrollstop", this.onScrollStop.bind(this));
 		},
 
-		// resizeFixedHeader: function($element, $table) {
-		// 	$element.find("th").each(function(index) {
-		// 		$(this).css("width", $table.find("th").eq(index).outerWidth() + "px");
-		// 	});
-		// },
-
 		onScrollStop: function() {
-			var offset = this.$scrollContainer.scrollTop();
-			var tableOffsetTop = this.$table.offset().top;
-			var tableOffsetBottom = tableOffsetTop + this.$table.height() - this.$table.find("thead").height();
-			if(offset < tableOffsetTop || offset > tableOffsetBottom) {
-				this.$tFixed.hide();
-			} else if(offset >= tableOffsetTop && offset <= tableOffsetBottom && this.$tFixed.is(":hidden")) {
-            	this.$tFixed.show();
-            }
+			window.requestAnimationFrame(function() {
+				var thead = $("thead");
+				var scrollContainer = $(".sapMPageEnableScrolling");
+				thead.css("transform", "translateY(" + scrollContainer.scrollTop() + "px");
+			});
 		}
 
 	});
