@@ -163,16 +163,36 @@ sap.ui.define([
 		},
 
 		enableSnapping: function() {
-			this.$scrollContainer = $(".sapMPageEnableScrolling");
-			this.$scrollContainer.on("scrollstop", this.onScrollStop.bind(this));
-		},
-
-		onScrollStop: function() {
-			window.requestAnimationFrame(function() {
+			//this.bTicking = false;
+			var $scrollContainer = $(".sapMPageEnableScrolling");
+			var onScroll = function() {
 				var thead = $("thead");
-				var scrollContainer = $(".sapMPageEnableScrolling");
-				thead.css("transform", "translateY(" + scrollContainer.scrollTop() + "px");
-			});
+				thead.css("transform", "translateY(" + $scrollContainer.scrollTop() + "px");
+			};
+
+			var requestAnimationFrame = window.requestAnimationFrame ||
+				window.webkitRequestAnimationFrame ||
+				window.mozRequestAnimationFrame ||
+				window.msRequestAnimationFrame ||
+				window.oRequestAnimationFrame;
+			var lastScrollTop = $scrollContainer.scrollTop();
+
+			function loop() {
+				var scrollTop = $scrollContainer.scrollTop();
+				if (lastScrollTop === scrollTop) {
+					requestAnimationFrame(loop);
+					return;
+				} else {
+					lastScrollTop = scrollTop;
+					onScroll();
+					requestAnimationFrame(loop);
+				}
+			}
+
+			if (requestAnimationFrame) {
+				loop();
+			}
+
 		}
 
 	});
