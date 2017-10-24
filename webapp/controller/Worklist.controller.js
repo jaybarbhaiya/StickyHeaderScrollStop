@@ -3,8 +3,9 @@ sap.ui.define([
 	"sap/ui/model/json/JSONModel",
 	"stickyheaders/model/formatter",
 	"sap/ui/model/Filter",
-	"sap/ui/model/FilterOperator"
-], function(BaseController, JSONModel, formatter, Filter, FilterOperator) {
+	"sap/ui/model/FilterOperator",
+	"sap/ui/Device"
+], function(BaseController, JSONModel, formatter, Filter, FilterOperator, Device) {
 	"use strict";
 
 	return BaseController.extend("stickyheaders.controller.Worklist", {
@@ -163,11 +164,19 @@ sap.ui.define([
 		},
 
 		enableSnapping: function() {
-			//this.bTicking = false;
-			var $scrollContainer = $(".sapMPageEnableScrolling");
+			var $scrollContainer = $(".sapMPageEnableScrolling"), timer;
 			var onScroll = function() {
 				var thead = $("thead");
 				thead.css("transform", "translateY(" + $scrollContainer.scrollTop() + "px");
+				thead.css("-ms-transform", "translateY(" + $scrollContainer.scrollTop() + "px");
+				thead.css("-webkit-transform", "translateY(" + $scrollContainer.scrollTop() + "px");
+				thead.css("-o-transform", "translateY(" + $scrollContainer.scrollTop() + "px");
+				thead.css("-moz-transform", "translateY(" + $scrollContainer.scrollTop() + "px");
+				thead.css("visibility", "hidden");
+				thead.css("z-index", 100);
+				timer = window.setTimeout(function() {
+					thead.css("visibility", "visible");
+				}, 200);
 			};
 
 			var requestAnimationFrame = window.requestAnimationFrame ||
@@ -184,7 +193,13 @@ sap.ui.define([
 					return;
 				} else {
 					lastScrollTop = scrollTop;
+					//var iInterval = 2000;
+					if (timer) {
+						window.clearTimeout(timer);
+					}
+					
 					onScroll();
+
 					requestAnimationFrame(loop);
 				}
 			}
